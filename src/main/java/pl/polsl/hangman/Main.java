@@ -6,12 +6,13 @@ import pl.polsl.hangman.model.HangmanGame;
 import pl.polsl.hangman.view.ConsoleUI;
 
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * This class contains the program's entry point.
  *
  * @author Krzysztof Molski
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class Main {
     /**
@@ -26,6 +27,6 @@ public class Main {
 
         HangmanGame game = new HangmanGame(dictionary);
         HangmanGameController controller = new HangmanGameController(game, view);
-        controller.run(args);
+        controller.run(List.of(args));
     }
 }

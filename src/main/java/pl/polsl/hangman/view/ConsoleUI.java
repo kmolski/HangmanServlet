@@ -5,6 +5,7 @@ import pl.polsl.hangman.HangmanGameView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
 /**
  * View implementation for hangman.
@@ -13,13 +14,13 @@ import java.io.Reader;
  * `System.out` is used as the output stream for all communication.
  *
  * @author Krzysztof Molski
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class ConsoleUI implements HangmanGameView {
     /**
      * A set of hangman pictures for different miss counts (from 0 to 6).
      */
-    private static final String[] HANGMEN = {
+    private static final List<String> HANGMEN = List.of(
             "         =+==========||\n"   +
             "          |     \\\\   ||\n" +
             "          |      \\\\  ||\n" +
@@ -131,7 +132,7 @@ public class ConsoleUI implements HangmanGameView {
             "       /     \\       ||\n"   +
             "                     ||\n"    +
             "=======================\n"
-    };
+    );
 
     /**
      * BufferedReader used for receiving user input.
@@ -194,7 +195,7 @@ public class ConsoleUI implements HangmanGameView {
      * @param misses         Number of misses.
      */
     public void printGuessScreen(boolean isGuessCorrect, int misses) {
-        System.out.println(HANGMEN[misses]);
+        System.out.println(HANGMEN.get(misses));
         System.out.println(isGuessCorrect ? "Your guess was correct!" : "Your guess was wrong!");
         System.out.println("You have missed " + misses + " times so far.");
         System.out.println();

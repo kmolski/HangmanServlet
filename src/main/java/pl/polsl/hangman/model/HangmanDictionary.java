@@ -1,9 +1,6 @@
 package pl.polsl.hangman.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Dictionary implementation for hangman.
@@ -12,13 +9,13 @@ import java.util.Random;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class HangmanDictionary {
     /**
      * The default set of words for the dictionary.
      */
-    private static final String[] DEFAULT_WORDS = { "koło", "drzwi", "drzewo", "powóz", "pole", "słońce" };
+    private static final List<String> DEFAULT_WORDS = List.of("koło", "drzwi", "drzewo", "powóz", "pole", "słońce");
 
     /**
      * An ArrayList that contains the dictionary's words.
@@ -34,7 +31,7 @@ public class HangmanDictionary {
      */
     public HangmanDictionary() {
         words = new ArrayList<>();
-        Collections.addAll(words, DEFAULT_WORDS);
+        words.addAll(DEFAULT_WORDS);
         randomGenerator = new Random();
     }
 
