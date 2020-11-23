@@ -2,12 +2,11 @@ package pl.polsl.hangman.controller;
 
 import pl.polsl.hangman.HangmanGameModel;
 import pl.polsl.hangman.HangmanGameView;
-import pl.polsl.hangman.model.GuessTooLongException;
+import pl.polsl.hangman.model.InvalidGuessException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,7 +17,7 @@ import java.util.stream.Stream;
  * communicating with the user, updating the model and managing the game's control flow.
  *
  * @author Krzysztof Molski
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class HangmanGameController {
     /**
@@ -44,8 +43,8 @@ public class HangmanGameController {
      * Run the hangman game.
      * @param args Command line arguments of the program.
      */
-    public void run(List<String> args) {
-        String filename = (args.size() > 0) ? args.get(0) : view.filenamePrompt();
+    public void run(String... args) {
+        String filename = (args.length > 0) ? args[0] : view.filenamePrompt();
 
         if (filename != null) {
             try (Stream<String> lines = Files.lines(Paths.get(filename))) {
@@ -72,7 +71,7 @@ public class HangmanGameController {
             try {
                 boolean isGuessCorrect = model.tryLetter(response);
                 view.printGuessScreen(isGuessCorrect, model.getMisses());
-            } catch (GuessTooLongException e) {
+            } catch (InvalidGuessException e) {
                 System.out.println("Your guess was too long!");
                 System.out.println();
                 continue;

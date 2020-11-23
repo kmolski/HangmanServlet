@@ -9,7 +9,7 @@ import java.util.*;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class HangmanDictionary {
     /**
@@ -25,6 +25,10 @@ public class HangmanDictionary {
      * Random number generator that is used to generate array indices.
      */
     private final Random randomGenerator;
+    /**
+     * The number of words inside the dictionary.
+     */
+    private int wordCount = 0;
 
     /**
      * Create a new dictionary with the default set of words.
@@ -32,6 +36,7 @@ public class HangmanDictionary {
     public HangmanDictionary() {
         words = new ArrayList<>();
         words.addAll(DEFAULT_WORDS);
+        wordCount += DEFAULT_WORDS.size();
         randomGenerator = new Random();
     }
 
@@ -55,7 +60,11 @@ public class HangmanDictionary {
      * @param words A collection of words to be added.
      */
     public void addWords(Collection<String> words) {
-        this.words.addAll(words);
+        if (words == null) { return; }
+        for (String word : words) {
+            this.words.add(word);
+            this.wordCount++;
+        }
     }
 
     /**
@@ -64,5 +73,13 @@ public class HangmanDictionary {
      */
     public boolean isEmpty() {
         return words.isEmpty();
+    }
+
+    /**
+     * Get the number of words inside the dictionary.
+     * @return Number of words in the dictionary.
+     */
+    public int getWordCount() {
+        return wordCount;
     }
 }

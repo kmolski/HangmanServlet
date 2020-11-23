@@ -12,7 +12,7 @@ import java.util.Collection;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0.1
+ * @version 1.0.3
  */
 public class HangmanGame implements HangmanGameModel {
     /**
@@ -36,6 +36,10 @@ public class HangmanGame implements HangmanGameModel {
      * Incorrect guess count.
      */
     private int misses;
+    /**
+     * Number of words that were guessed correctly.
+     */
+    private int wordsGuessed = 0;
 
     /**
      * Create a new model instance for the game, using the provided dictionary.
@@ -92,7 +96,7 @@ public class HangmanGame implements HangmanGameModel {
     }
 
     /**
-     * Check if the game is over (either all words have been exhausted, or the player has lost a round)
+     * Check if the game is over (either all words have been guessed, or the player has lost a round)
      * @return true if the game is over.
      */
     public boolean isGameOver() {
@@ -103,13 +107,17 @@ public class HangmanGame implements HangmanGameModel {
      * Guess a letter and check if the guess was correct. The guess has to be a single letter.
      * @param guess Guessed character (has to be a single letter).
      * @return true if the guess was correct.
-     * @throws GuessTooLongException Thrown if the guess is not a single letter.
+     * @throws InvalidGuessException Thrown if the guess is not a single letter.
      */
-    public boolean tryLetter(String guess) throws GuessTooLongException {
+    public boolean tryLetter(String guess) throws InvalidGuessException {
+        if (guess == null || guess.equals("")) {
+            throw new InvalidGuessException("empty or null guess");
+        }
+
         BreakIterator it = BreakIterator.getCharacterInstance();
         it.setText(guess);
         if (it.next() != it.last()) {
-            throw new GuessTooLongException(guess);
+            throw new InvalidGuessException(guess);
         }
 
         guessedLetters += guess;
@@ -118,6 +126,9 @@ public class HangmanGame implements HangmanGameModel {
             ++misses;
         }
 
+        if (isRoundOver()) {
+            ++wordsGuessed;
+        }
         return isGuessInWord;
     }
 
@@ -134,6 +145,6 @@ public class HangmanGame implements HangmanGameModel {
      * @return true if the player has won the game.
      */
     public boolean didWin() {
-        return dictionary.isEmpty();
+        return dictionary.isEmpty() && dictionary.getWordCount() == wordsGuessed;
     }
 }

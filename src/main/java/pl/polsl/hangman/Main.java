@@ -27,6 +27,6 @@ public class Main {
 
         HangmanGame game = new HangmanGame(dictionary);
         HangmanGameController controller = new HangmanGameController(game, view);
-        controller.run(List.of(args));
+        controller.run(args);
     }
 }

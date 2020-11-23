@@ -1,6 +1,6 @@
 package pl.polsl.hangman;
 
-import pl.polsl.hangman.model.GuessTooLongException;
+import pl.polsl.hangman.model.InvalidGuessException;
 
 import java.util.Collection;
 
@@ -26,9 +26,9 @@ public interface HangmanGameModel {
      * Guess a letter and check if the guess was correct. The guess has to be a single letter.
      * @param guess Guessed character (has to be a single letter).
      * @return true if the guess was correct.
-     * @throws GuessTooLongException Thrown if the guess is not a single letter.
+     * @throws InvalidGuessException Thrown if the guess is not a single letter.
      */
-    boolean tryLetter(String guess) throws GuessTooLongException;
+    boolean tryLetter(String guess) throws InvalidGuessException;
 
     /**
      * Get the word that is currently being guessed.
