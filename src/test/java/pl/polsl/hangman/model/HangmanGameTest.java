@@ -165,7 +165,7 @@ public class HangmanGameTest {
     /**
      * Verify that trying a single letter guess succeeds and trying a longer guess fails.
      * @param letter  A single letter that is passed to `tryLetter()`.
-     * @param tooLong A long guess (>1 letters) that is passed to `tryLetter()`.
+     * @param tooLong A long guess (more than 1 letter) that is passed to `tryLetter()`.
      */
     @ParameterizedTest
     @CsvSource({

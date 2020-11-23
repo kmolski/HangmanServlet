@@ -8,7 +8,7 @@ package pl.polsl.hangman.model;
  */
 public class InvalidGuessException extends Exception {
     /**
-     * Create a new GuessTooLongException for the incorrect guess.
+     * Create a new InvalidGuessException for the incorrect guess.
      * @param guess The guess taken from the user.
      */
     public InvalidGuessException(String guess) {
