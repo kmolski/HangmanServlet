@@ -11,30 +11,55 @@ import pl.polsl.hangman.JfxApplication;
 import pl.polsl.hangman.model.HangmanGame;
 import pl.polsl.hangman.model.InvalidGuessException;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import static pl.polsl.hangman.view.JfxUI.HANGMEN;
 
+/**
+ * Controller implementation for the main view.
+ *
+ * This class is responsible for updating the relevant information in the main view.
+ *
+ * @author Krzysztof Molski
+ * @version 1.0.1
+ */
 public class MainSceneController implements Initializable {
+    /**
+     * A label in which the hangman is drawn.
+     */
     @FXML
     private Label hangmanLabel;
 
+    /**
+     * A label that is used to display the current word in the masked form.
+     */
     @FXML
     private Label maskedWordLabel;
 
+    /**
+     * A label that is used to display information about the miss count.
+     */
     @FXML
     private Label missCountLabel;
 
+    /**
+     * A text field used for receiving guesses from the user.
+     */
     @FXML
     private TextField guessTextField;
 
+    /**
+     * A label that is used to inform the user about any errors.
+     */
     @FXML
     private Label errorLabel;
 
+    /**
+     * Event handler for the `Try guess` button.
+     */
     @FXML
-    private void tryGuessClicked() throws IOException {
+    private void tryGuessClicked() {
         HangmanGame model = JfxApplication.getModel();
         String guessText = guessTextField.getText();
 
@@ -53,8 +78,11 @@ public class MainSceneController implements Initializable {
         }
     }
 
+    /**
+     * Event handler for the `Skip word` button.
+     */
     @FXML
-    private void skipWordClicked() throws IOException {
+    private void skipWordClicked() {
         HangmanGame model = JfxApplication.getModel();
         model.reset();
         if (model.isGameOver()) {
@@ -65,11 +93,19 @@ public class MainSceneController implements Initializable {
         }
     }
 
+    /**
+     * Event handler for the `Quit` button.
+     */
     @FXML
     private void quitClicked() {
         Platform.exit();
     }
 
+    /**
+     * Initializer function for the MainScene view.
+     * @param url Location used to resolve relative paths.
+     * @param resourceBundle Resources used for the view.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         HangmanGame model = JfxApplication.getModel();

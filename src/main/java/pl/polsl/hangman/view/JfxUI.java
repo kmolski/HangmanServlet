@@ -9,6 +9,9 @@ import java.util.List;
  * @version 1.0
  */
 public class JfxUI {
+    /**
+     * A set of hangman pictures for different miss counts (from 0 to 6).
+     */
      public static final List<String> HANGMEN = List.of(
             "         =+==========||\n"   +
             "          |     \\\\   ||\n" +

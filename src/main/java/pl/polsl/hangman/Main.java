@@ -11,7 +11,7 @@ import javafx.application.Application;
 public class Main {
     /**
      * This method is the entry point of the program.
-     * @param args Program arguments. The first argument is the name of a file with additional words.
+     * @param args Names of the files with additional words.
      */
     public static void main(String[] args) {
         Application.launch(JfxApplication.class, args);

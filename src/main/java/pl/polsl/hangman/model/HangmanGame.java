@@ -12,7 +12,7 @@ import java.util.Collection;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0.3
+ * @version 1.0.4
  */
 public class HangmanGame implements HangmanGameModel {
     /**
@@ -146,5 +146,13 @@ public class HangmanGame implements HangmanGameModel {
      */
     public boolean didWin() {
         return dictionary.isEmpty() && dictionary.getWordCount() == wordsGuessed;
+    }
+
+    /**
+     * Get the number of words that have been guessed correctly.
+     * @return The correct guess count.
+     */
+    public int getWordsGuessed() {
+        return wordsGuessed;
     }
 }
