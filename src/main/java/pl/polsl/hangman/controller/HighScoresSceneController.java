@@ -104,7 +104,8 @@ public class HighScoresSceneController implements Initializable {
             return new SimpleStringProperty(x[1]);
         });
 
-        highScoreTable.getColumns().addAll(nameColumn, wordsColumn);
+        highScoreTable.getColumns().add(nameColumn);
+        highScoreTable.getColumns().add(wordsColumn);
         highScoreTable.setItems(scores);
     }
 }
