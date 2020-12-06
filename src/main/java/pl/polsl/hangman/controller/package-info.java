@@ -3,6 +3,6 @@
  *
  * @since 1.0
  * @author Krzysztof Molski
- * @version 1.0.2
+ * @version 1.0.3
  */
 package pl.polsl.hangman.controller;

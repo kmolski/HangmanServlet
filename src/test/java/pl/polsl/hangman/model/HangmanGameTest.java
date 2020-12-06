@@ -8,6 +8,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0
+ * @version 1.0.2
  */
 public class HangmanGameTest {
     /**
      * The model that is used during testing.
      */
-    HangmanGame model;
+    private HangmanGame model;
 
     /**
      * Sets up a model and its dictionary before each unit test.
@@ -117,8 +120,17 @@ public class HangmanGameTest {
     /**
      * Verify that the `isGameOver()` condition is correct.
      */
-    @Test
-    void testGameOverCondition() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "boat,apple,orange",
+            "green,blue,yellow",
+            "horse,house,field",
+            "ok,fine,correct"
+    })
+    void testGameOverCondition(String words) {
+        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        model.addWords(additionalWords);
+
         // Skip all words in the dictionary.
         while (model.getCurrentWord() != null) {
             model.reset();

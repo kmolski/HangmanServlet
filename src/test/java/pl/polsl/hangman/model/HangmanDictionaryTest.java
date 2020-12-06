@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -20,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0
+ * @version 1.0.2
  */
 public class HangmanDictionaryTest {
     /**
      * The dictionary that is used during testing.
      */
-    HangmanDictionary dictionary;
+    private HangmanDictionary dictionary;
 
     /**
      * Sets up a dictionary before each unit test.
@@ -94,8 +95,17 @@ public class HangmanDictionaryTest {
     /**
      * Verify that the dictionary gives out non-null words and correctly reports being empty.
      */
-    @Test
-    void testDrainWords() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "boat,apple,orange",
+            "green,blue,yellow",
+            "horse,house,field",
+            "ok,fine,correct"
+    })
+    void testDrainWords(String words) {
+        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        dictionary.addWords(additionalWords);
+
         // Take all words from the dictionary.
         while (!dictionary.isEmpty()) {
             // Words taken from a non-empty dictionary _must not_ be null.
