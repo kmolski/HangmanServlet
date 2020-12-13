@@ -1,9 +1,19 @@
 package pl.polsl.hangman.model;
 
+import com.sun.istack.NotNull;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import pl.polsl.hangman.HangmanGameModel;
+import pl.polsl.hangman.HibernateUtils;
 
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import java.io.Serializable;
 import java.text.BreakIterator;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Model implementation for hangman.
@@ -12,9 +22,27 @@ import java.util.Collection;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0.4
+ * @version 1.0.7
  */
-public class HangmanGame implements HangmanGameModel {
+@Entity
+@Table(name = "game_saves")
+public class HangmanGame implements HangmanGameModel, Serializable {
+    /**
+     * The identifier of the HangmanGame instance in the database.
+     */
+    @Id
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    /**
+     * Get the identifier of this HangmanGame instance.
+     * @return The HangmanGame identifier
+     */
+    public Long getId() {
+        return id;
+    }
+
     /**
      * The maximum number of incorrect guesses.
      */
@@ -23,23 +51,34 @@ public class HangmanGame implements HangmanGameModel {
     /**
      * The dictionary from which words will be taken.
      */
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "dict_id")
     private final HangmanDictionary dictionary;
     /**
      * The word that is currently being guessed.
      */
+    @NotNull
     private String currentWord;
     /**
      * Letters that have been tried so far.
      */
+    @NotNull
     private String guessedLetters;
     /**
      * Incorrect guess count.
      */
+    @NotNull
     private int misses;
     /**
      * Number of words that were guessed correctly.
      */
+    @NotNull
     private int wordsGuessed = 0;
+
+    /**
+     * The zero-argument constructor required for the JPA Entity annotation.
+     */
+    public HangmanGame() { dictionary = new HangmanDictionary(); }
 
     /**
      * Create a new model instance for the game, using the provided dictionary.
@@ -53,6 +92,7 @@ public class HangmanGame implements HangmanGameModel {
      * Add new words to the dictionary. Duplicates are not removed.
      * @param words Collection of words to be added.
      */
+    @Override
     public void addWords(Collection<String> words) {
         dictionary.addWords(words);
     }
@@ -60,6 +100,7 @@ public class HangmanGame implements HangmanGameModel {
     /**
      * Start a new round of the game - select a new random word, reset the miss count and guessed letters.
      */
+    @Override
     public void reset() {
         currentWord = dictionary.takeWord();
         guessedLetters = "";
@@ -71,6 +112,7 @@ public class HangmanGame implements HangmanGameModel {
      * have not been tried so far are replaced with `_` characters.
      * @return The current word with secret characters masked out.
      */
+    @Override
     public String getMaskedWord() {
         if (guessedLetters.length() == 0) {
             return "_".repeat(currentWord.length());
@@ -83,6 +125,7 @@ public class HangmanGame implements HangmanGameModel {
      * Get the incorrect guess count.
      * @return The number of incorrect guesses.
      */
+    @Override
     public int getMisses() {
         return misses;
     }
@@ -91,16 +134,18 @@ public class HangmanGame implements HangmanGameModel {
      * Check whether the current word has been guessed.
      * @return true if the current word has been guessed correctly.
      */
+    @Override
     public boolean isRoundOver() {
-        return currentWord.replaceAll("([" + guessedLetters + "])", "").equals("");
+        return currentWord.replaceAll("([" + guessedLetters + "])", "").isEmpty();
     }
 
     /**
      * Check if the game is over (either all words have been guessed, or the player has lost a round)
      * @return true if the game is over.
      */
+    @Override
     public boolean isGameOver() {
-        return misses == MAX_MISSES || currentWord == null;
+        return misses == MAX_MISSES || dictionary.getWordCount() == wordsGuessed || currentWord == null;
     }
 
     /**
@@ -109,8 +154,9 @@ public class HangmanGame implements HangmanGameModel {
      * @return true if the guess was correct.
      * @throws InvalidGuessException Thrown if the guess is not a single letter.
      */
+    @Override
     public boolean tryLetter(String guess) throws InvalidGuessException {
-        if (guess == null || guess.equals("")) {
+        if (guess == null || guess.isEmpty()) {
             throw new InvalidGuessException("empty or null guess");
         }
 
@@ -136,6 +182,7 @@ public class HangmanGame implements HangmanGameModel {
      * Get the word that is currently being guessed.
      * @return The current word.
      */
+    @Override
     public String getCurrentWord() {
         return currentWord;
     }
@@ -144,6 +191,7 @@ public class HangmanGame implements HangmanGameModel {
      * Check if the player has won the game through guessing all words correctly.
      * @return true if the player has won the game.
      */
+    @Override
     public boolean didWin() {
         return dictionary.isEmpty() && dictionary.getWordCount() == wordsGuessed;
     }
@@ -152,7 +200,111 @@ public class HangmanGame implements HangmanGameModel {
      * Get the number of words that have been guessed correctly.
      * @return The correct guess count.
      */
+    @Override
     public int getWordsGuessed() {
         return wordsGuessed;
+    }
+
+    /**
+     * Get the number of words left in the dictionary.
+     * @return The remaining words count.
+     */
+    @Override
+    public int getWordsRemaining() {
+        return dictionary.getWordCount() - wordsGuessed;
+    }
+
+    /**
+     * equals() implementation for the HangmanGame class.
+     * @param o The other object.
+     * @return true if the objects are equal.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HangmanGame game = (HangmanGame) o;
+        return Objects.equals(id, game.id);
+    }
+
+    /**
+     * hashCode() implementation for the HangmanGame class.
+     * @return Hash code of the HangmanGame object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    /**
+     * toString() implementation for the HangmanGame class.
+     * @return String representation the HangmanGame object.
+     */
+    @Override
+    public String toString() {
+        return "HangmanGame { id=" + id + " }";
+    }
+
+    /**
+     * Save the current game to the database.
+     * @return The serializable ID of the game save.
+     */
+    public Serializable saveGame() {
+        Serializable id;
+        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
+            Transaction transaction = hibernateSession.beginTransaction();
+            id = hibernateSession.save(this);
+            transaction.commit();
+        }
+        return id;
+    }
+
+    /**
+     * Update the save of the current game in the database.
+     * @return The saved instance of the game.
+     */
+    public HangmanGame updateGameSave() {
+        HangmanGame merged;
+        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
+            Transaction transaction = hibernateSession.beginTransaction();
+            merged = (HangmanGame) hibernateSession.merge(this);
+            transaction.commit();
+        }
+        return merged;
+    }
+
+    /**
+     * Get the save of a game with the specified ID from the database.
+     * @param id Game save ID.
+     * @return The saved instance of the game with the specified ID.
+     */
+    public static HangmanGame getGameSave(Serializable id) {
+        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
+            return hibernateSession.get(HangmanGame.class, id);
+        }
+    }
+
+    /**
+     * Get all game saves from the database.
+     * @return A list of all game saves.
+     */
+    public static List<HangmanGame> getAllGameSaves() {
+        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
+            CriteriaBuilder builder = hibernateSession.getCriteriaBuilder();
+            CriteriaQuery<HangmanGame> criteria = builder.createQuery(HangmanGame.class);
+            criteria.from(HangmanGame.class);
+            return hibernateSession.createQuery(criteria).getResultList();
+        }
+    }
+
+    /**
+     * Delete the save of the current game from the database.
+     */
+    public void deleteGameSave() {
+        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
+            Transaction transaction = hibernateSession.beginTransaction();
+            hibernateSession.delete(this);
+            transaction.commit();
+        }
     }
 }

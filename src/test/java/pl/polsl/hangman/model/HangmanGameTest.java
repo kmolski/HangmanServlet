@@ -1,7 +1,6 @@
 package pl.polsl.hangman.model;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -68,57 +67,81 @@ public class HangmanGameTest {
 
     /**
      * Verify that the `getMaskedWord()` masks the current word correctly.
+     * @param words A list of words to add.
      */
-    @Test
-    void testWordMasking() {
-        // The model must always be reset before use.
-        model.reset();
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "boat,apple,orange,green,blue,yellow",
+            "horse,house,field,ok,fine,correct"
+    })
+    void testWordMasking(String words) {
+        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        model.addWords(additionalWords);
 
-        // At this point, the masked word should consist of `_` characters only.
-        assertTrue(model.getMaskedWord().matches("_*"), "maskedWord contains chars other than '_'");
+        while (!model.isGameOver()) {
+            // The model must always be reset before use.
+            model.reset();
 
-        String currentWord = model.getCurrentWord();
-        BreakIterator it = BreakIterator.getCharacterInstance();
-        it.setText(currentWord);
-        String firstLetter = currentWord.substring(0, it.next());
+            // At this point, the masked word should consist of `_` characters only.
+            assertTrue(model.getMaskedWord().matches("_*"), "maskedWord contains chars other than '_'");
 
-        assertDoesNotThrow(() -> {
-            // Because the first letter of `currentWord` was used, the result of `tryLetter` should be true.
-            assertTrue(model.tryLetter(firstLetter), "The current word does not contain its first letter!");
-            // The masked word should now consist of the first letter of `currentWord` and `_` letters.
-            assertTrue(model.getMaskedWord().matches("[" + firstLetter + "_]*"),
-                    "maskedWord does not contain the first letter of the current word!");
-        }, "An exception has occurred:");
+            String currentWord = model.getCurrentWord();
+            BreakIterator it = BreakIterator.getCharacterInstance();
+            it.setText(currentWord);
+            String firstLetter = currentWord.substring(0, it.next());
+
+            assertDoesNotThrow(() -> {
+                // Because the first letter of `currentWord` was used, the result of `tryLetter` should be true.
+                assertTrue(model.tryLetter(firstLetter), "The current word does not contain its first letter!");
+                // The masked word should now consist of the first letter of `currentWord` and `_` letters.
+                assertTrue(model.getMaskedWord().matches("[" + firstLetter + "_]*"),
+                        "maskedWord does not contain the first letter of the current word!");
+            }, "An exception has occurred:");
+        }
     }
 
     /**
      * Verify that the `isRoundOver()` condition is correct.
+     * @param words A list of words to add.
      */
-    @Test
-    void testRoundOverCondition() {
-        // The model must always be reset before use.
-        model.reset();
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "boat,apple,orange,green,blue,yellow",
+            "horse,house,field,ok"
+    })
+    void testRoundOverCondition(String words) {
+        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        model.addWords(additionalWords);
 
-        String currentWord = model.getCurrentWord();
-        BreakIterator it = BreakIterator.getCharacterInstance();
-        it.setText(currentWord);
+        // The remaining word count must be greater than zero in the beginning.
+        assertTrue(model.getWordsRemaining() > 0, "The remaining word count is 0!");
 
-        assertDoesNotThrow(() -> {
-            // Iterate over the letters of the current word.
-            int start = it.first();
-            for (int end = it.next(); end != BreakIterator.DONE; start = end, end = it.next()) {
-                // `tryLetter` should always return true, as the letters are taken directly from `currentWord`.
-                assertTrue(model.tryLetter(currentWord.substring(start, end)),
-                        "The current word does not contain its own letter!");
-            }
-        }, "An exception has occurred:");
+        while (!model.isGameOver()) {
+            // The model must always be reset before use.
+            model.reset();
 
-        // After guessing all the letters correctly, we should have won the round.
-        assertTrue(model.isRoundOver(), "The round is not over after correctly guessing all letters!");
+            String currentWord = model.getCurrentWord();
+            BreakIterator it = BreakIterator.getCharacterInstance();
+            it.setText(currentWord);
+
+            assertDoesNotThrow(() -> {
+                // Iterate over the letters of the current word.
+                int start = it.first();
+                for (int end = it.next(); end != BreakIterator.DONE; start = end, end = it.next()) {
+                    // `tryLetter` should always return true, as the letters are taken directly from `currentWord`.
+                    assertTrue(model.tryLetter(currentWord.substring(start, end)),
+                            "The current word does not contain its own letter!");
+                }
+            }, "An exception has occurred:");
+
+            // After guessing all the letters correctly, we should have won the round.
+            assertTrue(model.isRoundOver(), "The round is not over after correctly guessing all letters!");
+        }
     }
 
     /**
      * Verify that the `isGameOver()` condition is correct.
+     * @param words A list of words to add.
      */
     @ParameterizedTest
     @ValueSource(strings = {
@@ -131,8 +154,11 @@ public class HangmanGameTest {
         List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         model.addWords(additionalWords);
 
+        // The remaining word count must be greater than zero in the beginning.
+        assertTrue(model.getWordsRemaining() > 0, "The remaining word count is 0!");
+
         // Skip all words in the dictionary.
-        while (model.getCurrentWord() != null) {
+        while (!model.isGameOver()) {
             model.reset();
         }
 

@@ -38,5 +38,32 @@
         <servlet-name>SkipWord</servlet-name>
         <url-pattern>/SkipWord</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Stats</servlet-name>
+        <servlet-class>pl.polsl.hangman.controller.StatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Stats</servlet-name>
+        <url-pattern>/Stats</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Saves</servlet-name>
+        <servlet-class>pl.polsl.hangman.controller.SavesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Saves</servlet-name>
+        <url-pattern>/Saves</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>LoadSave</servlet-name>
+        <servlet-class>pl.polsl.hangman.controller.LoadSaveServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoadSave</servlet-name>
+        <url-pattern>/LoadSave</url-pattern>
+    </servlet-mapping>
 
 </web-app>

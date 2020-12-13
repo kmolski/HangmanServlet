@@ -1,6 +1,14 @@
 package pl.polsl.hangman.model;
 
-import java.util.*;
+import com.sun.istack.NotNull;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Dictionary implementation for hangman.
@@ -9,9 +17,20 @@ import java.util.*;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0.3
+ * @version 1.0.5
  */
+@Entity
+@Table(name = "dictionary_saves")
 public class HangmanDictionary {
+    /**
+     * The identifier of the HangmanDictionary in the database.
+     */
+    @Id
+    @NotNull
+    @Column(name="dict_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     /**
      * The default set of words for the dictionary.
      */
@@ -20,14 +39,19 @@ public class HangmanDictionary {
     /**
      * An ArrayList that contains the dictionary's words.
      */
-    private final ArrayList<String> words;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @NotNull
+    private final List<String> words;
     /**
      * Random number generator that is used to generate array indices.
      */
+    @Transient
     private final Random randomGenerator;
     /**
      * The number of words inside the dictionary.
      */
+    @NotNull
     private int wordCount = 0;
 
     /**

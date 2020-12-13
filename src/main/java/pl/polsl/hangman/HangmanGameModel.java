@@ -8,7 +8,7 @@ import java.util.Collection;
  * Interface for the model implementations for hangman.
  *
  * @author Krzysztof Molski
- * @version 1.0.1
+ * @version 1.0.2
  */
 public interface HangmanGameModel {
     /**
@@ -66,4 +66,16 @@ public interface HangmanGameModel {
      * @return true if the current word has been guessed correctly.
      */
     boolean isRoundOver();
+
+    /**
+     * Get the number of words that have been guessed correctly.
+     * @return The correct guess count.
+     */
+    int getWordsGuessed();
+
+    /**
+     * Get the number of words left in the dictionary.
+     * @return The remaining words count.
+     */
+    int getWordsRemaining();
 }

@@ -1,10 +1,8 @@
 package pl.polsl.hangman.model;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -94,6 +92,7 @@ public class HangmanDictionaryTest {
 
     /**
      * Verify that the dictionary gives out non-null words and correctly reports being empty.
+     * @param words A list of words to add.
      */
     @ParameterizedTest
     @ValueSource(strings = {

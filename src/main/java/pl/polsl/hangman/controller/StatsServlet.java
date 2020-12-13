@@ -1,31 +1,43 @@
 package pl.polsl.hangman.controller;
 
-import pl.polsl.hangman.model.HangmanDictionary;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 import pl.polsl.hangman.model.HangmanGame;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Servlet implementation for the Home page.
+ * Servlet implementation for the Stats page.
  *
  * This servlet is responsible for displaying information about the current state
- * (miss count, the current word, etc.) of the game. It is located under "/Home".
+ * and history of the games. It is located under "/Stats".
  *
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "HomeServlet")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "StatsServlet")
+public class StatsServlet extends HttpServlet {
     /**
-     * Display the main screen of the game. Information about the current word
-     * and the miss count is displayed along with the relevant controls. If there's
-     * no model instance in the current session, a new instance is created.
+     * Find the appropriate cookie and return its value. If the cookie
+     * does not exist, the string "0" is returned instead.
+     * @param request The request that contains the cookie.
+     * @param cookieName The name of the cookie.
+     * @return The value of the cookie.
+     */
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie.getValue();
+            }
+        }
+        return "0";
+    }
+
+    /**
+     * Display information about the total number of wins/losses, correct/wrong guesses
+     * number of words that were guessed correctly/are remaining and the miss count.
+     * If there's no model instance in the current session, the client is redirected to HomeServlet.
      * @param request The HTTP request.
      * @param response The response (an HTML page).
      * @throws IOException May be thrown if sending the redirect or creating the PrintWriter fails.
@@ -34,14 +46,8 @@ public class HomeServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         HangmanGame model = (HangmanGame) session.getAttribute("model");
 
-        if (model == null || model.isGameOver()) {
-            HangmanDictionary dictionary = new HangmanDictionary();
-            model = new HangmanGame(dictionary);
-            model.reset();
-            model.saveGame();
-
-            session.setAttribute("model", model);
-            response.sendRedirect("add_words.html");
+        if (model == null) {
+            response.sendRedirect("Home");
             return;
         }
 
@@ -60,23 +66,17 @@ public class HomeServlet extends HttpServlet {
             out.println("<div class=\"navbar-brand\">hangman</div>");
             out.println("</header>");
             out.println("<div class=\"container my-4\">");
-            out.println("<div class=\"row\">");
-            out.println("<div class=\"col-sm\">");
-            out.println("<h1>Welcome to the game!</h1> <br/>");
-            out.println("The word is: " + model.getMaskedWord() + "<br/>");
-            out.println("You have missed " + model.getMisses() + " times. <br/> <br/>");
-            out.println("<form action=\"SubmitGuess\" method=\"post\">");
-            out.println("Enter your guess: ");
-            out.println("<input class=\"form-control my-2 w-25\" type=\"text\" minlength=\"1\" maxlength=\"1\" autocomplete=\"off\" name=\"guess\" id=\"name\" required autofocus>");
-            out.println("<button class=\"btn btn-primary my-2\" type=\"submit\">Try guess</button>");
-            out.println("<a href=\"SkipWord\" class=\"btn btn-secondary m-2\" role=\"button\">Skip word</a>");
-            out.println("<a href=\"Stats\" class=\"btn btn-secondary my-2\" role=\"button\">Game stats</a>");
+            out.println("<h1>Statistics from all games:</h1> <br/>");
+            out.println("You have won " + getCookieValue(request, "winCount") + " games. <br/>");
+            out.println("You have lost " + getCookieValue(request, "loseCount") + " games. <br/>");
+            out.println("You have made " + getCookieValue(request, "correctGuesses") + " correct guesses. <br/>");
+            out.println("You have made " + getCookieValue(request, "wrongGuesses") + " wrong guesses. <br/> <br/>");
+            out.println("<h1>Statistics from the current game:</h1> <br/>");
+            out.println("You have guessed " + model.getWordsGuessed() + " words correctly. <br/>");
+            out.println("There are " + model.getWordsRemaining() + " words left. <br/>");
+            out.println("You have missed " + model.getMisses() + " times in the current round. <br/> <br/>");
+            out.println("<a href=\"Home\" class=\"btn btn-primary my-2\" role=\"button\">Go back</a>");
             out.println("</form>");
-            out.println("</div>");
-            out.println("<div class=\"col-sm\">");
-            out.println("<img src=\"images/" + model.getMisses() + ".png\">");
-            out.println("</div>");
-            out.println("</div>");
             out.println("</div>");
             out.println("</body>");
             out.println("</html>");
