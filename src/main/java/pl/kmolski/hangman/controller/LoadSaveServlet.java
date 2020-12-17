@@ -1,6 +1,6 @@
-package pl.polsl.hangman.controller;
+package pl.kmolski.hangman.controller;
 
-import pl.polsl.hangman.model.HangmanGame;
+import pl.kmolski.hangman.model.HangmanGame;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

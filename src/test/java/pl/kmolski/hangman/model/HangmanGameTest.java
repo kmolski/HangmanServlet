@@ -1,5 +1,6 @@
-package pl.polsl.hangman.model;
+package pl.kmolski.hangman.model;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -217,7 +218,7 @@ public class HangmanGameTest {
         model.reset();
 
         // Guesses that are exactly 1 letter long are accepted.
-        assertDoesNotThrow(() -> model.tryLetter(letter), "A single letter was not accepted!");
+        Assertions.assertDoesNotThrow(() -> model.tryLetter(letter), "A single letter was not accepted!");
 
         // Guesses longer than 1 letter are rejected.
         assertThrows(InvalidGuessException.class, () -> model.tryLetter(tooLong),

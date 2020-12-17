@@ -1,4 +1,4 @@
-package pl.polsl.hangman;
+package pl.kmolski.hangman;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;

@@ -1,6 +1,6 @@
-package pl.polsl.hangman;
+package pl.kmolski.hangman;
 
-import pl.polsl.hangman.model.InvalidGuessException;
+import pl.kmolski.hangman.model.InvalidGuessException;
 
 import java.util.Collection;
 

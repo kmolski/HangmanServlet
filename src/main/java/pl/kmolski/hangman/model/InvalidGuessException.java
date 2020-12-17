@@ -1,4 +1,4 @@
-package pl.polsl.hangman.model;
+package pl.kmolski.hangman.model;
 
 /**
  * An exception that is thrown when the guess is not a single letter.

@@ -1,4 +1,4 @@
-package pl.polsl.hangman.model;
+package pl.kmolski.hangman.model;
 
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.Fetch;

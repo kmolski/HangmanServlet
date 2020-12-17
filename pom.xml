@@ -15,7 +15,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.7.0</junit.version>
-        <jakartaee>9.0</jakartaee>
     </properties>
 
     <dependencies>

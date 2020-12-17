@@ -5,7 +5,7 @@
          version="4.0">
     <servlet>
         <servlet-name>Home</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.HomeServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.HomeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
@@ -14,7 +14,7 @@
 
     <servlet>
         <servlet-name>AddWords</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.AddWordsServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.AddWordsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddWords</servlet-name>
@@ -23,7 +23,7 @@
 
     <servlet>
         <servlet-name>SubmitGuess</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.SubmitGuessServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.SubmitGuessServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SubmitGuess</servlet-name>
@@ -32,7 +32,7 @@
 
     <servlet>
         <servlet-name>SkipWord</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.SkipWordServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.SkipWordServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SkipWord</servlet-name>
@@ -41,7 +41,7 @@
     
     <servlet>
         <servlet-name>Stats</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.StatsServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.StatsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Stats</servlet-name>
@@ -50,7 +50,7 @@
 
     <servlet>
         <servlet-name>Saves</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.SavesServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.SavesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Saves</servlet-name>
@@ -59,7 +59,7 @@
     
     <servlet>
         <servlet-name>LoadSave</servlet-name>
-        <servlet-class>pl.polsl.hangman.controller.LoadSaveServlet</servlet-class>
+        <servlet-class>pl.kmolski.hangman.controller.LoadSaveServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoadSave</servlet-name>

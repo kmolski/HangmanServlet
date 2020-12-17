@@ -1,10 +1,10 @@
-package pl.polsl.hangman.model;
+package pl.kmolski.hangman.model;
 
 import com.sun.istack.NotNull;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import pl.polsl.hangman.HangmanGameModel;
-import pl.polsl.hangman.HibernateUtils;
+import pl.kmolski.hangman.HibernateUtils;
+import pl.kmolski.hangman.HangmanGameModel;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;

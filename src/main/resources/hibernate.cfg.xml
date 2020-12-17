@@ -11,12 +11,12 @@
 
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
-        <property name="hibernate.hbm2ddl.auto">validate</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
         <property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
         <property name="current_session_context_class">thread</property>
 
-        <mapping class="pl.polsl.hangman.model.HangmanGame"/>
-        <mapping class="pl.polsl.hangman.model.HangmanDictionary"/>
+        <mapping class="pl.kmolski.hangman.model.HangmanGame"/>
+        <mapping class="pl.kmolski.hangman.model.HangmanDictionary"/>
     </session-factory>
 </hibernate-configuration>

@@ -5,4 +5,4 @@
  * @author Krzysztof Molski
  * @version 1.0.3
  */
-package pl.polsl.hangman.controller;
+package pl.kmolski.hangman.controller;

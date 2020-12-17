@@ -1,10 +1,11 @@
-package pl.polsl.hangman.controller;
+package pl.kmolski.hangman.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import pl.polsl.hangman.model.HangmanGame;
+
+import pl.kmolski.hangman.model.HangmanGame;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,9 +1,10 @@
-package pl.polsl.hangman.controller;
+package pl.kmolski.hangman.controller;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import pl.polsl.hangman.model.HangmanGame;
-import pl.polsl.hangman.model.InvalidGuessException;
+
+import pl.kmolski.hangman.model.HangmanGame;
+import pl.kmolski.hangman.model.InvalidGuessException;
 
 import java.io.IOException;
 
