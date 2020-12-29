@@ -66,15 +66,4 @@ public class AddWordsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Process GET requests from the client.
-     * @param request The HTTP request.
-     * @param response The response associated with the request.
-     * @throws IOException May be thrown if sending the redirect fails.
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
 }

@@ -23,6 +23,11 @@ import java.util.Random;
 @Table(name = "dictionary_saves")
 public class HangmanDictionary {
     /**
+     * The default set of words for the dictionary.
+     */
+    private static final List<String> DEFAULT_WORDS = List.of("koło", "drzwi", "drzewo", "powóz", "pole", "słońce");
+
+    /**
      * The identifier of the HangmanDictionary in the database.
      */
     @Id
@@ -30,12 +35,6 @@ public class HangmanDictionary {
     @Column(name="dict_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    /**
-     * The default set of words for the dictionary.
-     */
-    private static final List<String> DEFAULT_WORDS = List.of("koło", "drzwi", "drzewo", "powóz", "pole", "słońce");
-
     /**
      * An ArrayList that contains the dictionary's words.
      */
