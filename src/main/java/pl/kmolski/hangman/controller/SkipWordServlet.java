@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "SkipWordServlet")
+@WebServlet(name = "SkipWord", urlPatterns = {"/SkipWord"})
 public class SkipWordServlet extends HttpServlet {
     /**
      * Process the word skip request from the client. If there's no model instance

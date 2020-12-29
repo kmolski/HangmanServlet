@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "SubmitGuessServlet")
+@WebServlet(name = "SubmitGuess", urlPatterns = "/SubmitGuess")
 public class SubmitGuessServlet extends HttpServlet {
     /**
      * Find the appropriate cookie, and increment its numeric value by 1. If the cookie

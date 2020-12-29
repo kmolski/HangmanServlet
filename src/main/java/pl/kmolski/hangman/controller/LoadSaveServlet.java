@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author Krzysztof Molski
  * @version 1.0.0
  */
-@WebServlet(name = "LoadSaveServlet")
+@WebServlet(name = "LoadSave", urlPatterns = {"/LoadSave"})
 public class LoadSaveServlet extends HttpServlet {
     /**
      * Process the save load request from the client. If a model instance does exist in the

@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "StatsServlet")
+@WebServlet(name = "Stats", urlPatterns = "/Stats")
 public class StatsServlet extends HttpServlet {
     /**
      * Find the appropriate cookie and return its value. If the cookie
@@ -76,7 +76,6 @@ public class StatsServlet extends HttpServlet {
             out.println("There are " + model.getWordsRemaining() + " words left. <br/>");
             out.println("You have missed " + model.getMisses() + " times in the current round. <br/> <br/>");
             out.println("<a href=\"Home\" class=\"btn btn-primary my-2\" role=\"button\">Go back</a>");
-            out.println("</form>");
             out.println("</div>");
             out.println("</body>");
             out.println("</html>");

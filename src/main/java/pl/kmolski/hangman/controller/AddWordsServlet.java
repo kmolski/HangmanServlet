@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "AddWordsServlet")
+@WebServlet(name = "AddWords", urlPatterns = {"/AddWords"})
 @MultipartConfig(maxFileSize = 4096, maxRequestSize = 6144)
 public class AddWordsServlet extends HttpServlet {
     /**

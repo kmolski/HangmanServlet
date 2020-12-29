@@ -1,13 +1,14 @@
 package pl.kmolski.hangman.controller;
 
-import pl.kmolski.hangman.model.HangmanDictionary;
-import pl.kmolski.hangman.model.HangmanGame;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import pl.kmolski.hangman.model.HangmanDictionary;
+import pl.kmolski.hangman.model.HangmanGame;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -20,7 +21,7 @@ import java.io.PrintWriter;
  * @author Krzysztof Molski
  * @version 1.0.1
  */
-@WebServlet(name = "HomeServlet")
+@WebServlet(name = "Home", urlPatterns = {"/Home"})
 public class HomeServlet extends HttpServlet {
     /**
      * Display the main screen of the game. Information about the current word

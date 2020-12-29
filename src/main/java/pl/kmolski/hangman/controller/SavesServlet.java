@@ -18,7 +18,7 @@ import java.io.PrintWriter;
  * @author Krzysztof Molski
  * @version 1.0.0
  */
-@WebServlet(name = "SavesServlet")
+@WebServlet(name = "Saves", urlPatterns = {"/Saves"})
 public class SavesServlet extends HttpServlet {
     /**
      * Display information about the game saves that are in the database: the last word that was being
