@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -21,6 +22,11 @@ import java.util.stream.Collectors;
  */
 @WebServlet(name = "Stats", urlPatterns = "/Stats")
 public class StatsServlet extends HttpServlet {
+    /**
+     * Names of the cookies used in the HTML template.
+     */
+    private static final Set<String> cookieNames = Set.of("winCount", "loseCount", "correctGuesses", "wrongGuesses");
+
     /**
      * Display information about the total number of wins/losses, correct/wrong guesses
      * number of words that were guessed correctly/are remaining and the miss count.
@@ -38,9 +44,11 @@ public class StatsServlet extends HttpServlet {
             return;
         }
 
+        response.setContentType("text/html;charset=UTF-8");
         WebContext ctx = new WebContext(request, response, getServletContext());
         ctx.setVariable("model", model);
         ctx.setVariables(Arrays.stream(request.getCookies())
+                               .filter(cookie -> cookieNames.contains(cookie.getName()))
                                .collect(Collectors.toMap(Cookie::getName, Cookie::getValue)));
         HangmanApplication.getTemplateEngine().process("Stats", ctx, response.getWriter());
     }
