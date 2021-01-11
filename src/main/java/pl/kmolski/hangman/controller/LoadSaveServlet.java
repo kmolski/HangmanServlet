@@ -1,13 +1,16 @@
 package pl.kmolski.hangman.controller;
 
+import pl.kmolski.hangman.dao.HangmanGameDAO;
 import pl.kmolski.hangman.model.HangmanGame;
 
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Servlet implementation for the LoadSave page.
@@ -21,6 +24,12 @@ import java.io.IOException;
 @WebServlet(name = "LoadSave", urlPatterns = {"/LoadSave"})
 public class LoadSaveServlet extends HttpServlet {
     /**
+     * Injected data-access object for HangmanGame object management.
+     */
+    @EJB
+    private HangmanGameDAO gameDAO;
+
+    /**
      * Process the save load request from the client. If a model instance does exist in the
      * current session, it will be saved to the database before any game save is loaded.
      * If the game save ID is invalid or missing, an HTTP 400 "Bad Request" response is sent back.
@@ -32,8 +41,7 @@ public class LoadSaveServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         HangmanGame model = (HangmanGame) session.getAttribute("model");
         if (model != null) {
-            model = model.updateGameSave();
-            session.setAttribute("model", model);
+            gameDAO.update(model);
         }
 
         String idParamString = request.getParameter("id");
@@ -50,13 +58,13 @@ public class LoadSaveServlet extends HttpServlet {
             return;
         }
 
-        model = HangmanGame.getGameSave(id);
-        if (model == null) {
+        Optional<HangmanGame> newModel = gameDAO.get(id);
+        if (newModel.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "game save ID " + id + " does not exist!");
             return;
         }
 
-        session.setAttribute("model", model);
+        session.setAttribute("model", newModel.get());
         response.sendRedirect("Home");
     }
 

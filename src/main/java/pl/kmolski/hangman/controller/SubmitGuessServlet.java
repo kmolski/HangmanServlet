@@ -1,8 +1,10 @@
 package pl.kmolski.hangman.controller;
 
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+import pl.kmolski.hangman.dao.HangmanGameDAO;
 import pl.kmolski.hangman.model.HangmanGame;
 import pl.kmolski.hangman.model.InvalidGuessException;
 
@@ -19,6 +21,12 @@ import java.io.IOException;
  */
 @WebServlet(name = "SubmitGuess", urlPatterns = "/SubmitGuess")
 public class SubmitGuessServlet extends HttpServlet {
+    /**
+     * Injected data-access object for HangmanGame object management.
+     */
+    @EJB
+    private HangmanGameDAO gameDAO;
+
     /**
      * Find the appropriate cookie, and increment its numeric value by 1. If the cookie
      * does not exist, a new cookie with the provided name and value "1" is created.
@@ -68,19 +76,19 @@ public class SubmitGuessServlet extends HttpServlet {
 
             if (model.isGameOver()) {
                 model.reset();
-                model.deleteGameSave();
+                gameDAO.delete(model);
                 session.removeAttribute("model");
 
                 incrementCookieValue(request, response, model.didWin() ? "winCount" : "loseCount");
                 response.sendRedirect(model.didWin() ? "game_won.html" : "game_lost.html");
             } else if (model.isRoundOver()) {
                 model.reset();
-                model = model.updateGameSave();
+                gameDAO.update(model);
 
                 session.setAttribute("model", model);
                 response.sendRedirect("round_over.html");
             } else {
-                model = model.updateGameSave();
+                gameDAO.update(model);
 
                 session.setAttribute("model", model);
                 incrementCookieValue(request, response, isGuessCorrect ? "correctGuesses" : "wrongGuesses");

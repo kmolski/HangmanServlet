@@ -6,3 +6,4 @@ wieża
 zamek
 wiosna
 jesień
+<script>alert("owned")</script>

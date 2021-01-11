@@ -2,9 +2,11 @@ package pl.kmolski.hangman.controller;
 
 import org.thymeleaf.context.WebContext;
 import pl.kmolski.hangman.HangmanApplication;
+import pl.kmolski.hangman.dao.HangmanGameDAO;
 import pl.kmolski.hangman.model.HangmanDictionary;
 import pl.kmolski.hangman.model.HangmanGame;
 
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,12 @@ import java.io.IOException;
 @WebServlet(name = "Home", urlPatterns = {"/Home"})
 public class HomeServlet extends HttpServlet {
     /**
+     * Injected data-access object for HangmanGame object management.
+     */
+    @EJB
+    private HangmanGameDAO gameDAO;
+
+    /**
      * Display the main screen of the game. Information about the current word
      * and the miss count is displayed along with the relevant controls. If there's
      * no model instance in the current session, a new instance is created.
@@ -39,7 +47,7 @@ public class HomeServlet extends HttpServlet {
             HangmanDictionary dictionary = new HangmanDictionary();
             model = new HangmanGame(dictionary);
             model.reset();
-            model.saveGame();
+            gameDAO.save(model);
 
             session.setAttribute("model", model);
             response.sendRedirect("add_words.html");

@@ -1,18 +1,12 @@
 package pl.kmolski.hangman.model;
 
 import com.sun.istack.NotNull;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import pl.kmolski.hangman.HibernateUtils;
 import pl.kmolski.hangman.HangmanGameModel;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.text.BreakIterator;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -243,68 +237,5 @@ public class HangmanGame implements HangmanGameModel, Serializable {
     @Override
     public String toString() {
         return "HangmanGame { id=" + id + " }";
-    }
-
-    /**
-     * Save the current game to the database.
-     * @return The serializable ID of the game save.
-     */
-    public Serializable saveGame() {
-        Serializable id;
-        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
-            Transaction transaction = hibernateSession.beginTransaction();
-            id = hibernateSession.save(this);
-            transaction.commit();
-        }
-        return id;
-    }
-
-    /**
-     * Update the save of the current game in the database.
-     * @return The saved instance of the game.
-     */
-    public HangmanGame updateGameSave() {
-        HangmanGame merged;
-        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
-            Transaction transaction = hibernateSession.beginTransaction();
-            merged = (HangmanGame) hibernateSession.merge(this);
-            transaction.commit();
-        }
-        return merged;
-    }
-
-    /**
-     * Get the save of a game with the specified ID from the database.
-     * @param id Game save ID.
-     * @return The saved instance of the game with the specified ID.
-     */
-    public static HangmanGame getGameSave(Serializable id) {
-        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
-            return hibernateSession.get(HangmanGame.class, id);
-        }
-    }
-
-    /**
-     * Get all game saves from the database.
-     * @return A list of all game saves.
-     */
-    public static List<HangmanGame> getAllGameSaves() {
-        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
-            CriteriaBuilder builder = hibernateSession.getCriteriaBuilder();
-            CriteriaQuery<HangmanGame> criteria = builder.createQuery(HangmanGame.class);
-            criteria.from(HangmanGame.class);
-            return hibernateSession.createQuery(criteria).getResultList();
-        }
-    }
-
-    /**
-     * Delete the save of the current game from the database.
-     */
-    public void deleteGameSave() {
-        try (Session hibernateSession = HibernateUtils.getFactory().openSession()) {
-            Transaction transaction = hibernateSession.beginTransaction();
-            hibernateSession.delete(this);
-            transaction.commit();
-        }
     }
 }

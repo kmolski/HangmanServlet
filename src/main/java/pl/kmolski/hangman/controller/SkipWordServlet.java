@@ -1,7 +1,10 @@
 package pl.kmolski.hangman.controller;
 
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+
+import pl.kmolski.hangman.dao.HangmanGameDAO;
 import pl.kmolski.hangman.model.HangmanGame;
 
 import java.io.IOException;
@@ -17,6 +20,12 @@ import java.io.IOException;
  */
 @WebServlet(name = "SkipWord", urlPatterns = {"/SkipWord"})
 public class SkipWordServlet extends HttpServlet {
+    /**
+     * Injected data-access object for HangmanGame object management.
+     */
+    @EJB
+    private HangmanGameDAO gameDAO;
+
     /**
      * Process the word skip request from the client. If there's no model instance
      * in the current session, the client is redirected to HomeServlet.
@@ -35,7 +44,7 @@ public class SkipWordServlet extends HttpServlet {
         model.reset();
 
         if (model.isGameOver()) {
-            model.deleteGameSave();
+            gameDAO.delete(model);
             session.removeAttribute("model");
 
             Cookie cookie = null;
@@ -56,8 +65,7 @@ public class SkipWordServlet extends HttpServlet {
             response.addCookie(cookie);
             response.sendRedirect("game_lost.html");
         } else {
-            model = model.updateGameSave();
-            session.setAttribute("model", model);
+            gameDAO.update(model);
             response.sendRedirect("Home");
         }
     }

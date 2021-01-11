@@ -3,6 +3,9 @@ package pl.kmolski.hangman;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 /**
  * Application class for the web-based hangman.
  *
@@ -13,6 +16,11 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  * @version 1.0.0
  */
 public class HangmanApplication {
+    /**
+     * The entity manager for the `hangman` persistence unit (HangmanGame storage).
+     */
+    private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("hangman");
+
     /**
      * The Thymeleaf template resolver for the application.
      */

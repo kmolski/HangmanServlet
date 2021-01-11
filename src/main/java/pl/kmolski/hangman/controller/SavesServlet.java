@@ -2,8 +2,9 @@ package pl.kmolski.hangman.controller;
 
 import org.thymeleaf.context.WebContext;
 import pl.kmolski.hangman.HangmanApplication;
-import pl.kmolski.hangman.model.HangmanGame;
+import pl.kmolski.hangman.dao.HangmanGameDAO;
 
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,12 @@ import java.io.IOException;
 @WebServlet(name = "Saves", urlPatterns = {"/Saves"})
 public class SavesServlet extends HttpServlet {
     /**
+     * Injected data-access object for HangmanGame object management.
+     */
+    @EJB
+    private HangmanGameDAO gameDAO;
+
+    /**
      * Display information about the game saves that are in the database: the last word that was being
      * guessed, the number of words that were guessed correctly/are remaining and the miss count.
      * @param request The HTTP request.
@@ -31,7 +38,7 @@ public class SavesServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         WebContext ctx = new WebContext(request, response, getServletContext());
-        ctx.setVariable("saves", HangmanGame.getAllGameSaves());
+        ctx.setVariable("saves", gameDAO.getAll());
         HangmanApplication.getTemplateEngine().process("Saves", ctx, response.getWriter());
     }
 
