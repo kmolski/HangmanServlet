@@ -58,8 +58,6 @@ public class HomeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         WebContext ctx = new WebContext(request, response, getServletContext());
         ctx.setVariable("model", model);
-        ctx.setVariable("word", model.getMaskedWord().chars().mapToObj(Character::toString)
-                                                            .collect(Collectors.joining(" ")));
         HangmanApplication.getTemplateEngine().process("Home", ctx, response.getWriter());
     }
 

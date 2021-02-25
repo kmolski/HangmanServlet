@@ -44,6 +44,12 @@ public interface HangmanGameModel {
     String getMaskedWord();
 
     /**
+     * Get all letters that have been guessed.
+     * @return The guessed letters.
+     */
+    String getGuessedLetters();
+
+    /**
      * Get the incorrect guess count.
      * @return The number of incorrect guesses.
      */
@@ -54,6 +60,7 @@ public interface HangmanGameModel {
      * @return true if the game is over.
      */
     boolean isGameOver();
+
 
     /**
      * Check if the player has won the game through guessing all words correctly.

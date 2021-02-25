@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.BreakIterator;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Model implementation for hangman.
@@ -108,11 +109,16 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      */
     @Override
     public String getMaskedWord() {
+        String word;
+
         if (guessedLetters.length() == 0) {
-            return "_".repeat(currentWord.length());
+            word = "_".repeat(currentWord.length());
         } else {
-            return currentWord.replaceAll("([^" + guessedLetters + "])", "_");
+            word = currentWord.replaceAll("([^" + guessedLetters + "])", "_");
         }
+
+        return word.chars().mapToObj(Character::toString)
+                           .collect(Collectors.joining(" "));
     }
 
     /**
@@ -179,6 +185,17 @@ public class HangmanGame implements HangmanGameModel, Serializable {
     @Override
     public String getCurrentWord() {
         return currentWord;
+    }
+
+    /**
+     * Get all guessed letters, separated by spaces.
+     * @return The guessed letters in ascending order.
+     */
+    @Override
+    public String getGuessedLetters() {
+        return guessedLetters.replaceAll("\\s", "")
+                             .chars().sorted().distinct().mapToObj(Character::toString)
+                             .collect(Collectors.joining(" "));
     }
 
     /**

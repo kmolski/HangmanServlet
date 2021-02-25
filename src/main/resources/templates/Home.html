@@ -25,7 +25,8 @@
         <div class="row">
             <div class="col-sm">
                 <h1>Welcome to the game!</h1> <br/>
-                The word is: <span data-th-text="${word}">maskedWord</span> <br/>
+                The word is: <span data-th-text="${model.maskedWord}">maskedWord</span> <br/>
+                You have already tried the following letters: <span data-th-text="${model.guessedLetters}">guessedLetters</span> <br/> <br/>
                 You have missed <span data-th-text="${model.misses}">misses</span> times. <br/> <br/>
                 <form action="SubmitGuess" method="post">
                     Enter your guess:
