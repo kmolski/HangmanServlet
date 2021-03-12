@@ -17,7 +17,7 @@ import java.util.Random;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0.5
+ * @version 1.0.6
  */
 @Entity
 @Table(name = "dictionary_saves")
@@ -25,15 +25,15 @@ public class HangmanDictionary {
     /**
      * The default set of words for the dictionary.
      */
-    private static final List<String> DEFAULT_WORDS = List.of("koło", "drzwi", "drzewo", "powóz", "pole", "słońce");
+    public static final List<String> DEFAULT_WORDS = List.of("koło", "drzwi", "drzewo", "powóz", "pole", "słońce");
 
     /**
      * The identifier of the HangmanDictionary in the database.
      */
     @Id
-    @NotNull
-    @Column(name="dict_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="dict_id")
+    @NotNull
     private Long id;
     /**
      * An ArrayList that contains the dictionary's words.
@@ -41,27 +41,17 @@ public class HangmanDictionary {
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     @NotNull
-    private final List<String> words;
+    private final List<String> words = new ArrayList<>();
     /**
      * Random number generator that is used to generate array indices.
      */
     @Transient
-    private final Random randomGenerator;
+    private final Random randomGenerator = new Random();
     /**
      * The number of words inside the dictionary.
      */
     @NotNull
     private int wordCount = 0;
-
-    /**
-     * Create a new dictionary with the default set of words.
-     */
-    public HangmanDictionary() {
-        words = new ArrayList<>();
-        words.addAll(DEFAULT_WORDS);
-        wordCount += DEFAULT_WORDS.size();
-        randomGenerator = new Random();
-    }
 
     /**
      * Pick a random word (the selected word is removed from the dictionary).
@@ -72,9 +62,7 @@ public class HangmanDictionary {
             return null;
         } else {
             int randomIndex = randomGenerator.nextInt(words.size());
-            String word = words.get(randomIndex);
-            words.remove(randomIndex);
-            return word;
+            return words.remove(randomIndex);
         }
     }
 
@@ -84,10 +72,8 @@ public class HangmanDictionary {
      */
     public void addWords(Collection<String> words) {
         if (words == null) { return; }
-        for (String word : words) {
-            this.words.add(word);
-            this.wordCount++;
-        }
+        this.words.addAll(words);
+        this.wordCount += words.size();
     }
 
     /**

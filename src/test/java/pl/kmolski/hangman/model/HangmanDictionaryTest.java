@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * adding new words, taking a random word, checking if the dictionary is empty.
  *
  * @author Krzysztof Molski
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class HangmanDictionaryTest {
     /**
@@ -48,22 +48,15 @@ public class HangmanDictionaryTest {
             "ok,fine,correct"
     })
     void testAddWords(String words) {
-        // Drain the dictionary.
-        while (!dictionary.isEmpty()) {
-            dictionary.takeWord();
-        }
-        assertTrue(dictionary.isEmpty(), "dictionary is not empty!");
-
-        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        var additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         dictionary.addWords(additionalWords);
         assertFalse(dictionary.isEmpty(), "dictionary is empty after addWords()");
 
-        // Drain the dictionary again.
+        // Drain the dictionary.
         while (!dictionary.isEmpty()) {
             // Remove the word from `additionalWords` when it's taken from the dictionary.
             additionalWords.remove(dictionary.takeWord());
         }
-        assertTrue(dictionary.isEmpty(), "dictionary is not empty!");
 
         // `additionalWords` should be empty, because its words were added to `dictionary`
         // and then removed from `additionalWords` as they were encountered in `dictionary`.
@@ -102,7 +95,7 @@ public class HangmanDictionaryTest {
             "ok,fine,correct"
     })
     void testDrainWords(String words) {
-        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        var additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         dictionary.addWords(additionalWords);
 
         // Take all words from the dictionary.
