@@ -41,7 +41,7 @@ public class SkipWordServlet extends HttpServlet {
             return;
         }
 
-        model.reset();
+        model.nextRound();
 
         if (model.isGameOver()) {
             gameDAO.delete(model);

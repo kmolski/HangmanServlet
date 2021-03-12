@@ -20,7 +20,7 @@ public interface HangmanGameModel {
     /**
      * Start a new round of the game - select a new random word, reset the miss count and guessed letters.
      */
-    void reset();
+    void nextRound();
 
     /**
      * Guess a letter and check if the guess was correct. The guess has to be a single letter.

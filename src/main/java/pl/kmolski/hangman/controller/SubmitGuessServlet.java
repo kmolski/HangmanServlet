@@ -44,7 +44,7 @@ public class SubmitGuessServlet extends HttpServlet {
                 return;
             }
         }
-        Cookie newCookie = new Cookie(cookieName, "1");
+        var newCookie = new Cookie(cookieName, "1");
         newCookie.setMaxAge(60 * 60 * 24 * 365);
         response.addCookie(newCookie);
     }
@@ -75,14 +75,13 @@ public class SubmitGuessServlet extends HttpServlet {
             boolean isGuessCorrect = model.tryLetter(guess);
 
             if (model.isGameOver()) {
-                model.reset();
                 gameDAO.delete(model);
                 session.removeAttribute("model");
 
                 incrementCookieValue(request, response, model.didWin() ? "winCount" : "loseCount");
                 response.sendRedirect(model.didWin() ? "game_won.html" : "game_lost.html");
             } else if (model.isRoundOver()) {
-                model.reset();
+                model.nextRound();
                 gameDAO.update(model);
 
                 session.setAttribute("model", model);

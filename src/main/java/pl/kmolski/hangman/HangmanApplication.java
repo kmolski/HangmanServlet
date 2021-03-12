@@ -32,7 +32,7 @@ public class HangmanApplication {
     private HangmanApplication() {}
 
     static {
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        var templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setTemplateMode("HTML");
         templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");

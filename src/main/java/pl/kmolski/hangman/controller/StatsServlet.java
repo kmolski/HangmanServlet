@@ -25,7 +25,7 @@ public class StatsServlet extends HttpServlet {
     /**
      * Names of the cookies used in the HTML template.
      */
-    private static final Set<String> cookieNames = Set.of("winCount", "loseCount", "correctGuesses", "wrongGuesses");
+    private static final Set<String> COOKIE_NAMES = Set.of("winCount", "loseCount", "correctGuesses", "wrongGuesses");
 
     /**
      * Display information about the total number of wins/losses, correct/wrong guesses
@@ -45,10 +45,10 @@ public class StatsServlet extends HttpServlet {
         }
 
         response.setContentType("text/html;charset=UTF-8");
-        WebContext ctx = new WebContext(request, response, getServletContext());
+        var ctx = new WebContext(request, response, getServletContext());
         ctx.setVariable("model", model);
         ctx.setVariables(Arrays.stream(request.getCookies())
-                               .filter(cookie -> cookieNames.contains(cookie.getName()))
+                               .filter(cookie -> COOKIE_NAMES.contains(cookie.getName()))
                                .collect(Collectors.toMap(Cookie::getName, Cookie::getValue)));
         HangmanApplication.getTemplateEngine().process("Stats", ctx, response.getWriter());
     }

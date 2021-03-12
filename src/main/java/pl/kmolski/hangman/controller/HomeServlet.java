@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 /**
  * Servlet implementation for the Home page.
@@ -45,9 +44,9 @@ public class HomeServlet extends HttpServlet {
         HangmanGame model = (HangmanGame) session.getAttribute("model");
 
         if (model == null || model.isGameOver()) {
-            HangmanDictionary dictionary = new HangmanDictionary();
-            model = new HangmanGame(dictionary);
-            model.reset();
+            model = new HangmanGame();
+            model.addWords(HangmanDictionary.DEFAULT_WORDS);
+            model.nextRound();
             gameDAO.save(model);
 
             session.setAttribute("model", model);
@@ -56,7 +55,7 @@ public class HomeServlet extends HttpServlet {
         }
 
         response.setContentType("text/html;charset=UTF-8");
-        WebContext ctx = new WebContext(request, response, getServletContext());
+        var ctx = new WebContext(request, response, getServletContext());
         ctx.setVariable("model", model);
         HangmanApplication.getTemplateEngine().process("Home", ctx, response.getWriter());
     }

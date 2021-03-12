@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,14 +38,14 @@ public class HangmanGameTest {
     }
 
     /**
-     * Verify that the `reset()` method resets `misses` and `guessedLetters` correctly.
+     * Verify that the `nextRound()` method resets `misses` and `guessedLetters` correctly.
      * @param letter A letter that is given to `tryLetter()`.
      */
     @ParameterizedTest
     @ValueSource(strings = {"a", "b", "c", "e", "i", "h", "o", "n", "t"})
     void testReset(String letter) {
-        // The model must always be reset before use.
-        model.reset();
+        model.addWords(HangmanDictionary.DEFAULT_WORDS);
+        model.nextRound();
         String maskedWord = model.getMaskedWord();
 
         assertDoesNotThrow(() -> {
@@ -58,7 +57,7 @@ public class HangmanGameTest {
                 assertTrue(model.getMisses() > 0, "miss count did not change!");
             }
 
-            model.reset();
+            model.nextRound();
             // After resetting the model, the incorrect guess count must be zero,
             // and the `maskedWord` must contain only `_` characters.
             assertEquals(model.getMisses(), 0, "incorrect guess count is not 0!");
@@ -76,12 +75,11 @@ public class HangmanGameTest {
             "horse,house,field,ok,fine,correct"
     })
     void testWordMasking(String words) {
-        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        var additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         model.addWords(additionalWords);
 
         while (!model.isGameOver()) {
-            // The model must always be reset before use.
-            model.reset();
+            model.nextRound();
 
             // At this point, the masked word should consist of `_` characters only.
             assertTrue(model.getMaskedWord().matches("_*"), "maskedWord contains chars other than '_'");
@@ -111,15 +109,14 @@ public class HangmanGameTest {
             "horse,house,field,ok"
     })
     void testRoundOverCondition(String words) {
-        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        var additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         model.addWords(additionalWords);
 
         // The remaining word count must be greater than zero in the beginning.
         assertTrue(model.getWordsRemaining() > 0, "The remaining word count is 0!");
 
         while (!model.isGameOver()) {
-            // The model must always be reset before use.
-            model.reset();
+            model.nextRound();
 
             String currentWord = model.getCurrentWord();
             BreakIterator it = BreakIterator.getCharacterInstance();
@@ -152,7 +149,7 @@ public class HangmanGameTest {
             "ok,fine,correct"
     })
     void testGameOverCondition(String words) {
-        List<String> additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
+        var additionalWords = new ArrayList<>(Arrays.asList(words.split(",")));
         model.addWords(additionalWords);
 
         // The remaining word count must be greater than zero in the beginning.
@@ -160,7 +157,7 @@ public class HangmanGameTest {
 
         // Skip all words in the dictionary.
         while (!model.isGameOver()) {
-            model.reset();
+            model.nextRound();
         }
 
         // After skipping all the words, the game should be over and we should've lost.
@@ -175,8 +172,8 @@ public class HangmanGameTest {
     @ParameterizedTest
     @ValueSource(strings = {"a", "b", "c", "e", "i", "h", "o", "n", "t"})
     void testTryLetter(String letter) {
-        // The model must always be reset before use.
-        model.reset();
+        model.addWords(HangmanDictionary.DEFAULT_WORDS);
+        model.nextRound();
 
         assertDoesNotThrow(() -> {
             String currentWord = model.getCurrentWord();
@@ -192,9 +189,9 @@ public class HangmanGameTest {
      */
     @ParameterizedTest
     @NullAndEmptySource
-    void testTryNullOrEmptyGuess(String letter) {
-        // The model must always be reset before use.
-        model.reset();
+    void testRejectNullOrEmptyGuess(String letter) {
+        model.addWords(HangmanDictionary.DEFAULT_WORDS);
+        model.nextRound();
 
         // Empty or null guesses must be rejected.
         assertThrows(InvalidGuessException.class, () -> model.tryLetter(letter),
@@ -213,9 +210,9 @@ public class HangmanGameTest {
             "'e', 'excessive'",
             "'i', 'incorrect'"
     })
-    void testGuessLengthEnforcement(String letter, String tooLong) {
-        // The model must always be reset before use.
-        model.reset();
+    void testRejectLongGuess(String letter, String tooLong) {
+        model.addWords(HangmanDictionary.DEFAULT_WORDS);
+        model.nextRound();
 
         // Guesses that are exactly 1 letter long are accepted.
         Assertions.assertDoesNotThrow(() -> model.tryLetter(letter), "A single letter was not accepted!");

@@ -37,7 +37,7 @@ public class SavesServlet extends HttpServlet {
      */
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
-        WebContext ctx = new WebContext(request, response, getServletContext());
+        var ctx = new WebContext(request, response, getServletContext());
         ctx.setVariable("saves", gameDAO.getAll());
         HangmanApplication.getTemplateEngine().process("Saves", ctx, response.getWriter());
     }

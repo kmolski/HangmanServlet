@@ -26,8 +26,8 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      * The identifier of the HangmanGame instance in the database.
      */
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull
     private Long id;
 
     /**
@@ -96,9 +96,9 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      * Start a new round of the game - select a new random word, reset the miss count and guessed letters.
      */
     @Override
-    public void reset() {
+    public void nextRound() {
         currentWord = dictionary.takeWord();
-        guessedLetters = "";
+        guessedLetters = " ";
         misses = 0;
     }
 
@@ -194,7 +194,7 @@ public class HangmanGame implements HangmanGameModel, Serializable {
     @Override
     public String getGuessedLetters() {
         return guessedLetters.replaceAll("\\s", "")
-                             .chars().sorted().distinct().mapToObj(Character::toString)
+                             .chars().distinct().sorted().mapToObj(Character::toString)
                              .collect(Collectors.joining(" "));
     }
 
