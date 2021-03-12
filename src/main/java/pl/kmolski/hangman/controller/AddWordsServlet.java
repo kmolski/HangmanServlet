@@ -48,7 +48,7 @@ public class AddWordsServlet extends HttpServlet {
         }
 
         try (var reader = new BufferedReader(new InputStreamReader(wordFilePart.getInputStream()))) {
-            model.addWords(reader.lines().map(String::trim).collect(Collectors.toList()));
+            model.addWords(reader.lines().map(String::trim).map(String::toLowerCase).collect(Collectors.toList()));
         }
 
         response.sendRedirect("Home");

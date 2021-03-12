@@ -7,8 +7,8 @@
     <jdbc-connection-pool name="H2Pool"
                           res-type="javax.sql.DataSource"
                           datasource-classname="org.h2.jdbcx.JdbcDataSource">
-        <property name="user" value="sa"/>
+        <property name="user" value=""/>
         <property name="password" value=""/>
-        <property name="url" value="jdbc:h2:mem:hangman"/>
+        <property name="url" value="jdbc:h2:${com.sun.aas.instanceRoot}/lib/databases/hangman;AUTO_SERVER=TRUE"/>
     </jdbc-connection-pool>
 </resources>
