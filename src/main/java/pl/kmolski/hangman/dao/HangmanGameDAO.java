@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * HangmanGame objects from the application database.
  *
  * @author Krzysztof Molski
- * @version 1.0.0
+ * @version 1.0.1
  */
 @Stateless
 public class HangmanGameDAO {
@@ -71,7 +71,7 @@ public class HangmanGameDAO {
      * @param model The game model that will be deleted.
      */
     public void delete(HangmanGame model) {
-        executeInsideTransaction(em -> em.remove(model));
+        executeInsideTransaction(em -> em.remove(em.contains(model) ? model : em.merge(model)));
     }
 
     /**

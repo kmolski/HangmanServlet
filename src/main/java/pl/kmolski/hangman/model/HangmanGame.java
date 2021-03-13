@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0.7
+ * @version 1.0.8
  */
 @Entity
 @Table(name = "game_saves")
@@ -97,7 +97,7 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      */
     @Override
     public void nextRound() {
-        currentWord = dictionary.takeWord();
+        currentWord = dictionary.takeWord().replaceAll("\\s+", " ");
         guessedLetters = " ";
         misses = 0;
     }
@@ -136,7 +136,8 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      */
     @Override
     public boolean isRoundOver() {
-        return currentWord.replaceAll("([" + guessedLetters + "])", "").isEmpty();
+        return currentWord == null || currentWord.replaceAll("([" + guessedLetters + "])", "")
+                                                 .isEmpty();
     }
 
     /**
@@ -145,7 +146,7 @@ public class HangmanGame implements HangmanGameModel, Serializable {
      */
     @Override
     public boolean isGameOver() {
-        return misses == MAX_MISSES || dictionary.getWordCount() == wordsGuessed || currentWord == null;
+        return misses == MAX_MISSES || (isRoundOver() && dictionary.isEmpty()) || currentWord == null;
     }
 
     /**
@@ -160,21 +161,18 @@ public class HangmanGame implements HangmanGameModel, Serializable {
             throw new InvalidGuessException("empty or null guess");
         }
 
+        String lowercaseGuess = guess.toLowerCase();
         BreakIterator it = BreakIterator.getCharacterInstance();
-        it.setText(guess);
+        it.setText(lowercaseGuess);
         if (it.next() != it.last()) {
-            throw new InvalidGuessException(guess);
+            throw new InvalidGuessException(lowercaseGuess);
         }
 
-        guessedLetters += guess;
-        boolean isGuessInWord = currentWord.contains(guess);
-        if (!isGuessInWord) {
-            ++misses;
-        }
+        guessedLetters += lowercaseGuess;
+        boolean isGuessInWord = currentWord.contains(lowercaseGuess);
+        if (!isGuessInWord) { ++misses; }
 
-        if (isRoundOver()) {
-            ++wordsGuessed;
-        }
+        if (isRoundOver()) { ++wordsGuessed; }
         return isGuessInWord;
     }
 

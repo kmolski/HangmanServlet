@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * guessing letters, managing the dictionary and win/lose conditions.
  *
  * @author Krzysztof Molski
- * @version 1.0.2
+ * @version 1.0.3
  */
 public class HangmanGameTest {
     /**
@@ -61,7 +61,7 @@ public class HangmanGameTest {
             // After resetting the model, the incorrect guess count must be zero,
             // and the `maskedWord` must contain only `_` characters.
             assertEquals(model.getMisses(), 0, "incorrect guess count is not 0!");
-            assertTrue(model.getMaskedWord().matches("_*"), "maskedWord contains chars other than '_'");
+            assertTrue(model.getMaskedWord().matches("[_ ]*"), "maskedWord contains chars other than '_'");
         }, "An exception has occurred:");
     }
 
